@@ -1,0 +1,44 @@
+#/!bin/bash    указание об использовании интерпретатора
+
+options=(
+	'1'
+	"2"
+	'3'
+	'4'
+	'5'
+)              присваиваем значения одномерному массиву     
+echo 'Please choose an option'  выводим сообщение на терминал
+select input in "${options[@]}"; do   выбор варианта по переменной input в массиве
+	case "$input" in              проверка условия выбора и выполнение варианта
+		"${options[0]}")      если 1
+			ls            отображает файлы и директории в рабочей директории
+			;;
+		"${options[1]}")      если 2  
+			date $'+Time: %T\nDate: %D' вывод даты и времени
+			;;
+		"${options[2]}")       если 3
+			read -p 'What file do you wish to check? ' finput
+		с клавиатуры вводим на сообщение имя в переменную finput
+		далее проверка наличия введённого имени в рабочей директории
+			if [[ -d $finput ]]; then  если директория то будем печатать ...
+				format='%s is a directory.\n'
+			elif [[ -f $finput ]]; then если файл то будем печатать ...
+				format='%s is a file.\n'
+			else                        такого имени не существует
+				format='%s does not exist.\n'
+			fi
+			printf "$format" "$finput" собственно форматированный вывод  
+					на терминал результата работы оператора if
+			;;
+		"${options[3]}")       если 4
+			read -p 'Please enter filename: ' binput  вводим имя файла
+			cp "$binput"{,.bak}            создаём файл с расш  .bak
+			;;
+		"${options[4]}")       если 5
+			break           выход из циклов
+			;;
+		*)
+			echo 'Not a valid option.' если input не попадает в массив
+			;;
+	esac    завершение операции выбора CASE
+done            завершение операции SELECT
